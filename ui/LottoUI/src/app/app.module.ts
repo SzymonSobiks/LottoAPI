@@ -7,6 +7,10 @@ import { NewdrawComponent } from './newdraw/newdraw.component';
 import { ShowlastDrawComponent } from './newdraw/showlast-draw/showlast-draw.component';
 import { AddDrawComponent } from './newdraw/add-draw/add-draw.component';
 import { DrawhistoryComponent } from './drawhistory/drawhistory.component';
+import { SharedService } from './shared.service';
+
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,9 +22,12 @@ import { DrawhistoryComponent } from './drawhistory/drawhistory.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
-  providers: [],
+  providers: [SharedService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
