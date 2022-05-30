@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using LottoAPI.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Data;
@@ -21,7 +22,8 @@ namespace LottoAPI.Controllers
         public JsonResult Get()
         {
             string query = @"
-                      select DrawId, DrawNumber, DrawDateTime from dbo.DrawHistory";
+                      select DrawId, DrawNumber1, DrawNumber2, DrawNumber3, DrawNumber4, DrawNumber5,
+                      DrawDateTime from dbo.DrawHistory order by DrawDateTime";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("LotteryAppCon");
             SqlDataReader myReader;
@@ -41,7 +43,33 @@ namespace LottoAPI.Controllers
             return new JsonResult(table);
         }
 
+        [HttpPost]
+        public JsonResult Post(Draw draw)
+        {
 
+            string query = @"
+                      insert into dbo.DrawHistory values
+                      (" + draw.DrawNumber1 + @", "+ draw.DrawNumber2 + @", " + draw.DrawNumber3 +
+                      @", " + draw.DrawNumber4 + @", " + draw.DrawNumber5 + @", '" + draw.DrawDateTime + @"')
+                      ";
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("LotteryAppCon");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader); ;
+
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult("Added Succesfully");
+        }
 
     }
 }
