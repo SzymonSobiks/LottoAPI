@@ -11,6 +11,7 @@ import { SharedService } from './shared.service';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatSortModule} from '@angular/material/sort';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import {MatSortModule} from '@angular/material/sort';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    MatSortModule
+    MatSortModule,
+    NoopAnimationsModule
   ],
   providers: [SharedService],
   bootstrap: [AppComponent]
