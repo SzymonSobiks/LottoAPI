@@ -16,7 +16,13 @@ export class AddDrawComponent implements OnInit {
  
 
   draw:any=[
-    {name: 'defaultDraw', drawId: 0, numbers: 0, timestamp: '30/05/2022 00:00:00'}
+    {drawId: 0, 
+    DrawNumber1:0,
+    DrawNumber2:0,
+    DrawNumber3:0,
+    DrawNumber4:0,
+    DrawNumber5:0,
+    timestamp: '30/05/2022 00:00:00'}
   ];
 
 
@@ -29,8 +35,18 @@ export class AddDrawComponent implements OnInit {
      // for (let i = 0; i < 5; i++) {
     //   this.draw.numbers[i] = Math.floor(Math.random() * 51);
     // }
+    const numbers = [0,0,0,0,0];
 
-    var number = Math.floor(Math.random() * 51);
+    for(let i = 0; i < 5; i++)
+    {
+      do{
+        var rand = Math.floor(Math.random() * 51);
+      }
+      while(numbers.includes(rand))
+      
+      numbers[i] = rand;
+
+    }
 
     const dateNow = new Date();
 
@@ -41,14 +57,25 @@ export class AddDrawComponent implements OnInit {
     // this.ngOnInit();
 
     var val = {
-              DrawNumber:number,DrawDateTime:timestamp};
+              DrawNumber1:numbers[0],
+              DrawNumber2:numbers[1],
+              DrawNumber3:numbers[2],
+              DrawNumber4:numbers[3],
+              DrawNumber5:numbers[4],
+              DrawDateTime:timestamp};
 
               this.service.addDraw(val).subscribe(res=>{
-                alert(res.toString());
+                //alert(res.toString());
               });
     
     this.draw=[
-          {drawId: 0, numbers: number, timestamp: timestamp.toLocaleString().replace(',', '')}
+          {drawId: 0,
+            DrawNumber1:numbers[0],
+            DrawNumber2:numbers[1],
+            DrawNumber3:numbers[2],
+            DrawNumber4:numbers[3],
+            DrawNumber5:numbers[4],
+            timestamp: timestamp.toLocaleString().replace(',', '')}
     ];
 
     if(this.isFirstDraw){
