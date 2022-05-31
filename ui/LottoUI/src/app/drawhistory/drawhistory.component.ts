@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from 'src/app/shared.service';
+import {Sort} from '@angular/material/sort';
 
 export interface Draw {
   DrawId: number;
