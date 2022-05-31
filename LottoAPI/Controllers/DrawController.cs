@@ -50,7 +50,7 @@ namespace LottoAPI.Controllers
             string query = @"
                       insert into dbo.DrawHistory values
                       (" + draw.DrawNumber1 + @", "+ draw.DrawNumber2 + @", " + draw.DrawNumber3 +
-                      @", " + draw.DrawNumber4 + @", " + draw.DrawNumber5 + @", '" + draw.DrawDateTime + @"')
+                      @", " + draw.DrawNumber4 + @", " + draw.DrawNumber5 + @", '" + draw.DrawDateTime.Substring(0,19).Replace('T',' ') + @"')
                       ";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("LotteryAppCon");
