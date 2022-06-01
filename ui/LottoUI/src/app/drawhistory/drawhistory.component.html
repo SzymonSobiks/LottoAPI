@@ -1,17 +1,20 @@
-<table class="table text-center table-striped">
-    <thead>
+
+<h3 mat-display-2 class="d-flex justify-content-center mat-display-2">List of previous draws</h3>
+
+<table matSort (matSortChange)="sortData($event)" class="table text-center table-striped mat-elevation-z8">
+    <thead >
         <tr>
-            <!-- <th>Id</th> -->
-            <th>Number #1</th>
-            <th>Number #2</th>
-            <th>Number #3</th>
-            <th>Number #4</th>
-            <th>Number #5</th>
-            <th>Timestamp</th>
+            <!-- <th mat-sort-header="id">Id</th> -->
+            <th mat-sort-header="number1">Number #1</th>
+            <th mat-sort-header="number2">Number #2</th>
+            <th mat-sort-header="number3">Number #3</th>
+            <th mat-sort-header="number4">Number #4</th>
+            <th mat-sort-header="number5">Number #5</th>
+            <th mat-sort-header="timestamp">Timestamp</th>
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let dataItem of DrawList">
+        <tr *ngFor="let dataItem of sortedData">
             <!-- <td>{{dataItem.DrawId}}</td> -->
             <td>{{dataItem.DrawNumber1}}</td>
             <td>{{dataItem.DrawNumber2}}</td>
