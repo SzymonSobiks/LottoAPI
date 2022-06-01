@@ -22,15 +22,7 @@ export class DrawhistoryComponent implements OnInit {
 
 
 
-  DrawList:Draw[]=[
-    {DrawId: 0, 
-    DrawNumber1:0,
-    DrawNumber2:0,
-    DrawNumber3:0,
-    DrawNumber4:0,
-    DrawNumber5:0,
-    DrawDateTime: new Date('30/05/2022 00:00:00')}
-  ];
+  DrawList:Draw[]=[];
 
   sortedData: Draw[];
 
@@ -60,8 +52,8 @@ export class DrawhistoryComponent implements OnInit {
         return compare(a.DrawNumber4, b.DrawNumber4, isAsc);
       case 'number5':
         return compare(a.DrawNumber5, b.DrawNumber5, isAsc);
-      // case 'timestamp':
-      //   return compare(a.DrawDateTime, b.DrawDateTime, isAsc);
+      case 'timestamp':
+        return compare(a.DrawDateTime, b.DrawDateTime, isAsc);
       default:
         return 0;
     }
@@ -75,6 +67,7 @@ export class DrawhistoryComponent implements OnInit {
   refreshDrawList(){
     this.service.getDrawList().subscribe(data=>{
       this.DrawList=data;
+      this.sortedData=this.DrawList;
     });
   }
 
