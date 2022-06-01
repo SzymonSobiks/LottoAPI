@@ -21,8 +21,7 @@ export class AddDrawComponent implements OnInit {
     DrawNumber2:0,
     DrawNumber3:0,
     DrawNumber4:0,
-    DrawNumber5:0,
-    timestamp: '30/05/2022 00:00:00'}
+    DrawNumber5:0}
   ];
 
 
@@ -48,9 +47,8 @@ export class AddDrawComponent implements OnInit {
 
     }
 
-    const dateNow = new Date();
 
-    var timestamp = dateNow;
+    var timestamp = new Date;
 
   
 
@@ -62,8 +60,9 @@ export class AddDrawComponent implements OnInit {
               DrawNumber3:numbers[2],
               DrawNumber4:numbers[3],
               DrawNumber5:numbers[4],
-              DrawDateTime:timestamp};
-
+              DrawDateTime:formatDate(timestamp)
+            };
+              // alert(formatDate(timestamp))
               this.service.addDraw(val).subscribe(res=>{
                 //alert(res.toString());
               });
@@ -75,7 +74,8 @@ export class AddDrawComponent implements OnInit {
             DrawNumber3:numbers[2],
             DrawNumber4:numbers[3],
             DrawNumber5:numbers[4],
-            timestamp: timestamp.toLocaleString().replace(',', '')}
+            timestamp: timestamp.toLocaleString().replace(',',' ')
+          } //time should be in local not UTC
     ];
 
     if(this.isFirstDraw){
@@ -84,4 +84,24 @@ export class AddDrawComponent implements OnInit {
     }
   }
 
+}
+
+function formatDate(date: Date) {
+  return (
+    [
+      date.getFullYear(),
+      padTo2Digits(date.getMonth() + 1),
+      padTo2Digits(date.getDate()),
+    ].join('-') +
+    ' ' +
+    [
+      padTo2Digits(date.getHours()),
+      padTo2Digits(date.getMinutes()),
+      padTo2Digits(date.getSeconds()),
+    ].join(':')
+  );
+}
+
+function padTo2Digits(num: number) {
+  return num.toString().padStart(2, '0');
 }
