@@ -1,0 +1,29 @@
+<h3  class="d-flex justify-content-center mat-display-2">Draw your numbers!</h3>
+<table class="table text-center table-striped mat-elevation-z3">
+    <thead>
+        <tr>
+            <!-- <th>ID</th> -->
+            <th>Number #1</th>
+            <th>Number #2</th>
+            <th>Number #3</th>
+            <th>Number #4</th>
+            <th>Number #5</th>
+            <!-- <th>timestamp</th> -->
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let dataItem of draw">
+            <!-- <td>{{dataItem.drawId}}</td> -->
+            <td>{{dataItem.DrawNumber1}}</td>
+            <td>{{dataItem.DrawNumber2}}</td>
+            <td>{{dataItem.DrawNumber3}}</td>
+            <td>{{dataItem.DrawNumber4}}</td>
+            <td>{{dataItem.DrawNumber5}}</td>
+            <!-- <td>{{dataItem.timestamp}}</td> -->
+        </tr>
+    </tbody>
+</table>
+
+<div class=" d-flex justify-content-center">
+    <button (click)="addDraw()" class="m-1 btn btn-light btn-outline-primary mat-raised-button" Button>{{text}}</button>
+</div>

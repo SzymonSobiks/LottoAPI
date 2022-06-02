@@ -9,14 +9,107 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Serialization;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace LottoAPI
 {
     public class Startup
     {
+        private const string ConnectionStringName = "LotteryAppCon";
+        private const string TableName = "DrawHistory";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            IsConnectionPossible();
+        }
+        
+        private bool IsConnectionPossible()
+        {
+            if (!IsConnectionStringValid())
+            {
+                return false;
+            }
+            
+            //Check if table exists
+            if (!IsTableExists())
+            {
+                Console.WriteLine("Table does not exist");
+                
+                if (!CreateDbTable())
+                {
+                    Console.WriteLine("Table could not be created");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        //This method creates the table
+        private bool CreateDbTable()
+        {
+            try
+            {
+                //check if table already exists
+                using (SqlConnection connection = new(Configuration.GetConnectionString(ConnectionStringName)))
+                {
+                    connection.Open();
+                    //create table
+                    SqlCommand createTable = new("CREATE TABLE " + TableName + "(DrawId int identity(1,1),DrawNumber1 int,DrawNumber2 int,DrawNumber3 int,DrawNumber4 int,DrawNumber5 int,DrawDateTime char(19));", connection);
+                    createTable.ExecuteReader();
+                    Console.WriteLine("Table created");
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        //This method checks if the database exists
+        private bool IsConnectionStringValid()
+        {
+            using SqlConnection connection = new(Configuration.GetConnectionString(ConnectionStringName));
+            try
+            {
+                connection.Open();
+                return true;
+            }
+            catch (SqlException)
+            {
+                Console.WriteLine("Invalid connection string or access denied. Check if database is set-up correctly.");
+                return false;
+            }
+        }
+
+        //This method checks if the table exists
+        private bool IsTableExists()
+        {
+            try
+            {
+                using SqlConnection connection = new(Configuration.GetConnectionString(ConnectionStringName));
+                connection.Open();
+                SqlCommand command = new("SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '" + TableName + "'", connection);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
         }
 
         public IConfiguration Configuration { get; }
@@ -24,6 +117,19 @@ namespace LottoAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Enable CORS
+            services.AddCors(c =>
+            {
+                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            });
+
+            //JSON Serializer
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft
+                .Json.ReferenceLoopHandling.Ignore)
+                .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver
+                = new DefaultContractResolver());
 
             services.AddControllers();
         }
@@ -31,6 +137,8 @@ namespace LottoAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -45,5 +153,8 @@ namespace LottoAPI
                 endpoints.MapControllers();
             });
         }
+
+        
+        
     }
 }
