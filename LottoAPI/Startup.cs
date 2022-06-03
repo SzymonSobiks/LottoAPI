@@ -19,6 +19,7 @@ namespace LottoAPI
     {
         private const string ConnectionStringName = "LotteryAppCon";
         private const string TableName = "DrawHistory";
+        private const string DatabaseName = "LotteryDB";
 
         public Startup(IConfiguration configuration)
         {
@@ -64,7 +65,7 @@ namespace LottoAPI
                 using (SqlConnection connection = new SqlConnection(Configuration.GetConnectionString(ConnectionStringName)))
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("USE master; CREATE DATABASE LotteryDB", connection);
+                    SqlCommand command = new SqlCommand("CREATE DATABASE " + DatabaseName + @"", connection);
                     command.ExecuteNonQuery();
                 }
                 Console.WriteLine("Database created");
@@ -85,7 +86,7 @@ namespace LottoAPI
                 using (SqlConnection connection = new SqlConnection(Configuration.GetConnectionString(ConnectionStringName)))
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("SELECT * FROM sys.databases WHERE name = 'LotteryDB'", connection);
+                    SqlCommand command = new SqlCommand("SELECT * FROM sys.databases WHERE name = '" + DatabaseName + @"'", connection);
                     SqlDataReader reader = command.ExecuteReader();
                     if (reader.HasRows)
                     {
@@ -116,7 +117,15 @@ namespace LottoAPI
                 {
                     connection.Open();
                     //create table
-                    SqlCommand createTable = new("USE LotteryDB; CREATE TABLE " + TableName + "(DrawId int identity(1,1),DrawNumber1 int,DrawNumber2 int,DrawNumber3 int,DrawNumber4 int,DrawNumber5 int,DrawDateTime char(19));", connection);
+                    SqlCommand createTable = new("USE " + DatabaseName + @"; 
+                    CREATE TABLE " + TableName + @"(DrawId int identity(1,1),
+                                                    DrawNumber1 int,
+                                                    DrawNumber2 int,
+                                                    DrawNumber3 int,
+                                                    DrawNumber4 int,
+                                                    DrawNumber5 int,
+                                                    DrawDateTime char(19));", connection);
+                    
                     createTable.ExecuteReader();
                     Console.WriteLine("Table created");
                 }
