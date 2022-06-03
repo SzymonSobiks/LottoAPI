@@ -34,11 +34,12 @@ namespace LottoAPI.Controllers
             {
                 myCon.Open();
                 using SqlCommand myCommand = new(query, myCon);
-                myReader = myCommand.ExecuteReader();
-                table.Load(myReader); ;
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader); ;
 
-                myReader.Close();
-                myCon.Close();
+                    myReader.Close();
+                    myCon.Close();
+                }
             }
 
             return new JsonResult(table);
@@ -86,11 +87,12 @@ namespace LottoAPI.Controllers
             {
                 myCon.Open();
                 using SqlCommand myCommand = new SqlCommand(query, myCon);
-                myReader = myCommand.ExecuteReader();
-                table.Load(myReader); ;
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader); ;
 
-                myReader.Close();
-                myCon.Close();
+                    myReader.Close();
+                    myCon.Close();
+                }
             }
 
             return new JsonResult("Updated Succesfully");
