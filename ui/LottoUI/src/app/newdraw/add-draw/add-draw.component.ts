@@ -17,11 +17,11 @@ export class AddDrawComponent implements OnInit {
 
   draw:any=[
     {drawId: 0, 
-    DrawNumber1:0,
-    DrawNumber2:0,
-    DrawNumber3:0,
-    DrawNumber4:0,
-    DrawNumber5:0}
+    DrawNumber1:"-",
+    DrawNumber2:"-",
+    DrawNumber3:"-",
+    DrawNumber4:"-",
+    DrawNumber5:"-"}
   ];
 
 
@@ -31,9 +31,6 @@ export class AddDrawComponent implements OnInit {
 
   addDraw() {
 
-     // for (let i = 0; i < 5; i++) {
-    //   this.draw.numbers[i] = Math.floor(Math.random() * 51);
-    // }
     const numbers = [0,0,0,0,0];
 
     for(let i = 0; i < 5; i++)
@@ -47,12 +44,7 @@ export class AddDrawComponent implements OnInit {
 
     }
 
-
     var timestamp = new Date;
-
-  
-
-    // this.ngOnInit();
 
     var val = {
               DrawNumber1:numbers[0],
@@ -62,9 +54,7 @@ export class AddDrawComponent implements OnInit {
               DrawNumber5:numbers[4],
               DrawDateTime:formatDate(timestamp)
             };
-              // alert(formatDate(timestamp))
               this.service.addDraw(val).subscribe(res=>{
-                //alert(res.toString());
               });
     
     this.draw=[
@@ -75,7 +65,7 @@ export class AddDrawComponent implements OnInit {
             DrawNumber4:numbers[3],
             DrawNumber5:numbers[4],
             timestamp: timestamp.toLocaleString().replace(',',' ')
-          } //time should be in local not UTC
+          }
     ];
 
     if(this.isFirstDraw){
