@@ -24,7 +24,7 @@ namespace LottoAPI.Controllers
         [HttpGet]
         public JsonResult Get()
         {
-            string query = @"
+            string query = @"USE LotteryDB;
                       select DrawId, DrawNumber1, DrawNumber2, DrawNumber3, DrawNumber4, DrawNumber5,
                       DrawDateTime from "+TableName+" order by DrawDateTime";
             DataTable table = new();
@@ -48,7 +48,7 @@ namespace LottoAPI.Controllers
         public JsonResult Post(Draw draw)
         {
 
-            string query = @"insert into " + TableName + " values(" + draw.DrawNumber1 + @", "+ draw.DrawNumber2 + @", " + draw.DrawNumber3 +
+            string query = @"USE LotteryDB; insert into " + TableName + " values(" + draw.DrawNumber1 + @", "+ draw.DrawNumber2 + @", " + draw.DrawNumber3 +
                       @", " + draw.DrawNumber4 + @", " + draw.DrawNumber5 + @", '" + draw.DrawDateTime.Substring(0, 19).Replace('T', ' ') + @"')
                       ";
             DataTable table = new DataTable();

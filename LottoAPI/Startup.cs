@@ -23,11 +23,20 @@ namespace LottoAPI
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            //CreateDbTable();
             IsConnectionPossible();
         }
         
         private bool IsConnectionPossible()
         {
+            if (!IsDatabaseExists())
+            {
+                if (!CreateDatabase())
+                {
+                    return false;
+                }
+            }
+            
             if (!IsConnectionStringValid())
             {
                 return false;
@@ -47,6 +56,56 @@ namespace LottoAPI
             return true;
         }
 
+        //This method creates the database
+        private bool CreateDatabase()
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Configuration.GetConnectionString(ConnectionStringName)))
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("USE master; CREATE DATABASE LotteryDB", connection);
+                    command.ExecuteNonQuery();
+                }
+                Console.WriteLine("Database created");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        //Check if sql database exists
+        private bool IsDatabaseExists()
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Configuration.GetConnectionString(ConnectionStringName)))
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("SELECT * FROM sys.databases WHERE name = 'LotteryDB'", connection);
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        Console.WriteLine("Database exists");
+                        return true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Database does not exist");
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
         //This method creates the table
         private bool CreateDbTable()
         {
@@ -57,7 +116,7 @@ namespace LottoAPI
                 {
                     connection.Open();
                     //create table
-                    SqlCommand createTable = new("CREATE TABLE " + TableName + "(DrawId int identity(1,1),DrawNumber1 int,DrawNumber2 int,DrawNumber3 int,DrawNumber4 int,DrawNumber5 int,DrawDateTime char(19));", connection);
+                    SqlCommand createTable = new("USE LotteryDB; CREATE TABLE " + TableName + "(DrawId int identity(1,1),DrawNumber1 int,DrawNumber2 int,DrawNumber3 int,DrawNumber4 int,DrawNumber5 int,DrawDateTime char(19));", connection);
                     createTable.ExecuteReader();
                     Console.WriteLine("Table created");
                 }
@@ -94,7 +153,7 @@ namespace LottoAPI
             {
                 using SqlConnection connection = new(Configuration.GetConnectionString(ConnectionStringName));
                 connection.Open();
-                SqlCommand command = new("SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '" + TableName + "'", connection);
+                SqlCommand command = new("USE LotteryDB; SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '" + TableName + "'", connection);
                 SqlDataReader reader = command.ExecuteReader();
                 if (reader.HasRows)
                 {
