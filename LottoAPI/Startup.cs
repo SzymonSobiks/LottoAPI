@@ -24,8 +24,12 @@ namespace LottoAPI
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            //CreateDbTable();
-            IsConnectionPossible();
+            
+            if (!IsConnectionPossible())
+            {
+                Console.WriteLine("Connection to database failed. Please check connection string and try again.");
+                Environment.Exit(1);
+            }
         }
         
         private bool IsConnectionPossible()
@@ -43,14 +47,11 @@ namespace LottoAPI
                 return false;
             }
             
-            //Check if table exists
             if (!IsTableExists())
-            {
-                Console.WriteLine("Table does not exist");
-                
+            {    
                 if (!CreateDbTable())
                 {
-                    Console.WriteLine("Table could not be created");
+                    Console.WriteLine("Error! Table could not be created.");
                     return false;
                 }
             }
@@ -68,7 +69,6 @@ namespace LottoAPI
                     SqlCommand command = new SqlCommand("CREATE DATABASE " + DatabaseName + @"", connection);
                     command.ExecuteNonQuery();
                 }
-                Console.WriteLine("Database created");
                 return true;
             }
             catch (Exception ex)
@@ -90,12 +90,10 @@ namespace LottoAPI
                     SqlDataReader reader = command.ExecuteReader();
                     if (reader.HasRows)
                     {
-                        Console.WriteLine("Database exists");
                         return true;
                     }
                     else
                     {
-                        Console.WriteLine("Database does not exist");
                         return false;
                     }
                 }
@@ -127,7 +125,6 @@ namespace LottoAPI
                                                     DrawDateTime char(19));", connection);
                     
                     createTable.ExecuteReader();
-                    Console.WriteLine("Table created");
                 }
 
                 return true;
