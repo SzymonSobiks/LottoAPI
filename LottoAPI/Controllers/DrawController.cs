@@ -39,7 +39,6 @@ namespace LottoAPI.Controllers
 
                     myReader.Close();
                     myCon.Close();
-                }
             }
 
             return new JsonResult(table);
@@ -92,7 +91,6 @@ namespace LottoAPI.Controllers
 
                     myReader.Close();
                     myCon.Close();
-                }
             }
 
             return new JsonResult("Updated Succesfully");
