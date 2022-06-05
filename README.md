@@ -3,33 +3,16 @@ Angular UI + .NET API Application generating simulated lottery draws.
 
 ## How to install
 ### Prerequisites
-You need to have this software on your machine:
-- Microsoft SQL Server
-- Visual Studio
-- Node.js
+You need to have Docker installed on your machine.
 
 Clone this repository to your desired directory.
-### SQL Server
-Server must be named ".", otherwise appsettings.json has to be modified.
-
-### Node.js
-*If you already have a global Angular instance you can skip this step.*
-
-
-Open Node.js console and type the following:
+### Docker
+Open command line in the main project folder and type the following:
 ```
-npm install -g @angular/cli
+docker-compose up
 ```
-
-## Running the app
-Navigate to LottoAPI\ui\LottoUI and launch command line there.
-
-Type the following in the console:
+### Browser
+When all Docker tasks are finished, the app will be available on:
 ```
-ng serve --open
+http://localhost:4200
 ```
-Angular project should be launching.
-
-Open LottoAPI using Visual Studio and run the program.
-
-Both the angular app and .NET API have to be running for the app to work correctly.
