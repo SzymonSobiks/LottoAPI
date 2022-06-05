@@ -1,5 +1,4 @@
 ﻿using LottoAPI.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Data;
@@ -14,18 +13,22 @@ namespace LottoAPI.Controllers
         private const string ConnectionStringName = "LotteryAppCon";
         private const string DatabaseName = "LotteryDB";
         private const string TableName = "DrawHistory";
+        private readonly string _connectionString;
         private readonly IConfiguration _configuration;
 
         public DrawController(IConfiguration configuration)
         {
             _configuration = configuration;
+
+            _connectionString = _configuration.GetConnectionString(ConnectionStringName);
+
         }
 
 
         [HttpGet]
         public JsonResult Get()
         {
-            string query = @"USE "+DatabaseName+@";
+            string query = @"USE " + DatabaseName + @";
                            select DrawId, 
                                   DrawNumber1, 
                                   DrawNumber2, 
@@ -33,19 +36,19 @@ namespace LottoAPI.Controllers
                                   DrawNumber4, 
                                   DrawNumber5,
                                   DrawDateTime 
-                                  from "+TableName+" order by DrawDateTime";
+                                  from " + TableName + " order by DrawDateTime";
             DataTable table = new();
-            string sqlDataSource = _configuration.GetConnectionString(ConnectionStringName);
+            string sqlDataSource = _connectionString;
             SqlDataReader myReader;
             using (SqlConnection myCon = new(sqlDataSource))
             {
                 myCon.Open();
                 using SqlCommand myCommand = new(query, myCon);
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader); ;
+                myReader = myCommand.ExecuteReader();
+                table.Load(myReader); ;
 
-                    myReader.Close();
-                    myCon.Close();
+                myReader.Close();
+                myCon.Close();
             }
 
             return new JsonResult(table);
@@ -58,14 +61,14 @@ namespace LottoAPI.Controllers
             string query = @"USE " + DatabaseName + @"; 
                            insert into " + TableName + @" values("
                                 + draw.DrawNumber1 + @", "
-                                + draw.DrawNumber2 + @", " 
-                                + draw.DrawNumber3 + @", " 
-                                + draw.DrawNumber4 + @", " 
-                                + draw.DrawNumber5 + @", '" 
+                                + draw.DrawNumber2 + @", "
+                                + draw.DrawNumber3 + @", "
+                                + draw.DrawNumber4 + @", "
+                                + draw.DrawNumber5 + @", '"
                                 + draw.DrawDateTime.Substring(0, 19).Replace('T', ' ') + @"')
                                 ";
             DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString(ConnectionStringName);
+            string sqlDataSource = _connectionString;
             SqlDataReader myReader;
             using (SqlConnection myCon = new SqlConnection(sqlDataSource))
             {
@@ -88,27 +91,27 @@ namespace LottoAPI.Controllers
         {
 
             string query = @"USE " + DatabaseName + @"; 
-                           update " + TableName + 
+                           update " + TableName +
                            @" set DrawNumber1 = " + draw.DrawNumber1 +
-                              @", DrawNumber2 = " + draw.DrawNumber2 + 
+                              @", DrawNumber2 = " + draw.DrawNumber2 +
                               @", DrawNumber3 = " + draw.DrawNumber3 +
-                              @", DrawNumber4 = " + draw.DrawNumber4 + 
+                              @", DrawNumber4 = " + draw.DrawNumber4 +
                               @", DrawNumber5 = " + draw.DrawNumber5 +
-                              @", DrawDateTime = '" + draw.DrawDateTime.Substring(0, 19).Replace('T', ' ') 
+                              @", DrawDateTime = '" + draw.DrawDateTime.Substring(0, 19).Replace('T', ' ')
                               + @"' where DrawId = " + draw.DrawId + @"
                               ";
             DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString(ConnectionStringName);
+            string sqlDataSource = _connectionString;
             SqlDataReader myReader;
             using (SqlConnection myCon = new(sqlDataSource))
             {
                 myCon.Open();
                 using SqlCommand myCommand = new SqlCommand(query, myCon);
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader); ;
+                myReader = myCommand.ExecuteReader();
+                table.Load(myReader); ;
 
-                    myReader.Close();
-                    myCon.Close();
+                myReader.Close();
+                myCon.Close();
             }
 
             return new JsonResult("Updated Succesfully");
@@ -122,7 +125,7 @@ namespace LottoAPI.Controllers
                       delete from " + TableName + " where DrawId = " + id + @"
                       ";
             DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString(ConnectionStringName);
+            string sqlDataSource = _connectionString;
             SqlDataReader myReader;
             using (SqlConnection myCon = new SqlConnection(sqlDataSource))
             {
