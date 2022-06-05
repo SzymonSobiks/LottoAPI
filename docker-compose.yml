@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  ms-sql-server:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "AtTheSource!"
+    ports: 
+    - "1450:1433"
+  lottoapi:
+    build:
+      context: ./LottoAPI
+    restart: always
+    ports:
+    - "5001:5001"
+    depends_on:
+      - ms-sql-server
+  lottoui:
+    build:
+      context: ./ui/LottoUI
+    ports: 
+    - "4200:80"

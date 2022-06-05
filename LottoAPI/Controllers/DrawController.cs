@@ -14,6 +14,7 @@ namespace LottoAPI.Controllers
         private const string ConnectionStringName = "LotteryAppCon";
         private const string DatabaseName = "LotteryDB";
         private const string TableName = "DrawHistory";
+        private readonly string _connectionString = "Server=host.docker.internal,1450;Initial Catalog=master;User Id=sa;Password=AtTheSource!; MultipleActiveResultSets=true";
         private readonly IConfiguration _configuration;
 
         public DrawController(IConfiguration configuration)
@@ -35,7 +36,7 @@ namespace LottoAPI.Controllers
                                   DrawDateTime 
                                   from "+TableName+" order by DrawDateTime";
             DataTable table = new();
-            string sqlDataSource = _configuration.GetConnectionString(ConnectionStringName);
+            string sqlDataSource = _connectionString;
             SqlDataReader myReader;
             using (SqlConnection myCon = new(sqlDataSource))
             {
@@ -65,7 +66,7 @@ namespace LottoAPI.Controllers
                                 + draw.DrawDateTime.Substring(0, 19).Replace('T', ' ') + @"')
                                 ";
             DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString(ConnectionStringName);
+            string sqlDataSource = _connectionString;
             SqlDataReader myReader;
             using (SqlConnection myCon = new SqlConnection(sqlDataSource))
             {
@@ -98,7 +99,7 @@ namespace LottoAPI.Controllers
                               + @"' where DrawId = " + draw.DrawId + @"
                               ";
             DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString(ConnectionStringName);
+            string sqlDataSource = _connectionString;
             SqlDataReader myReader;
             using (SqlConnection myCon = new(sqlDataSource))
             {
@@ -122,7 +123,7 @@ namespace LottoAPI.Controllers
                       delete from " + TableName + " where DrawId = " + id + @"
                       ";
             DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString(ConnectionStringName);
+            string sqlDataSource = _connectionString;
             SqlDataReader myReader;
             using (SqlConnection myCon = new SqlConnection(sqlDataSource))
             {

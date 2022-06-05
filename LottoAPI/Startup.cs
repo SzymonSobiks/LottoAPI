@@ -20,6 +20,7 @@ namespace LottoAPI
         private const string ConnectionStringName = "LotteryAppCon";
         private const string TableName = "DrawHistory";
         private const string DatabaseName = "LotteryDB";
+        private readonly string _connectionString = "Server=host.docker.internal,1450;Initial Catalog=master;User Id=sa;Password=AtTheSource!; MultipleActiveResultSets=true";
 
         public Startup(IConfiguration configuration)
         {
@@ -63,7 +64,7 @@ namespace LottoAPI
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(Configuration.GetConnectionString(ConnectionStringName)))
+                using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand("CREATE DATABASE " + DatabaseName + @"", connection);
@@ -83,7 +84,7 @@ namespace LottoAPI
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(Configuration.GetConnectionString(ConnectionStringName)))
+                using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand("SELECT * FROM sys.databases WHERE name = '" + DatabaseName + @"'", connection);
@@ -111,7 +112,7 @@ namespace LottoAPI
             try
             {
                 //check if table already exists
-                using (SqlConnection connection = new(Configuration.GetConnectionString(ConnectionStringName)))
+                using (SqlConnection connection = new(_connectionString))
                 {
                     connection.Open();
                     //create table
@@ -139,7 +140,7 @@ namespace LottoAPI
         //This method checks if the database exists
         private bool IsConnectionStringValid()
         {
-            using SqlConnection connection = new(Configuration.GetConnectionString(ConnectionStringName));
+            using SqlConnection connection = new(_connectionString);
             try
             {
                 connection.Open();
@@ -157,7 +158,7 @@ namespace LottoAPI
         {
             try
             {
-                using SqlConnection connection = new(Configuration.GetConnectionString(ConnectionStringName));
+                using SqlConnection connection = new(_connectionString);
                 connection.Open();
                 SqlCommand command = new("USE LotteryDB; SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '" + TableName + "'", connection);
                 SqlDataReader reader = command.ExecuteReader();
