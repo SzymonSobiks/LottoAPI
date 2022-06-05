@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace LottoAPI.Models
+﻿namespace LottoAPI.Models
 {
     public class Draw
     {
