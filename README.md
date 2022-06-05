@@ -10,7 +10,7 @@ You need to have this software on your machine:
 
 Clone this repository to your desired directory.
 ### SQL Server
-Server must be named ".", otherwise launchsettings.json has to be modified.
+Server must be named ".", otherwise appsettings.json has to be modified.
 
 ### Node.js
 *If you already have a global Angular instance you can skip this step.*
