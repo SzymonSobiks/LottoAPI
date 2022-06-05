@@ -1,18 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Newtonsoft.Json.Serialization;
+using System;
 using System.Data.SqlClient;
-using System.Data;
-using System.Configuration;
 
 namespace LottoAPI
 {
@@ -22,9 +15,9 @@ namespace LottoAPI
         private const string TableName = "DrawHistory";
         private const string DatabaseName = "LotteryDB";
         private readonly string _connectionString;
-        
 
-        
+
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -37,7 +30,8 @@ namespace LottoAPI
                 Environment.Exit(1);
             }
         }
-        
+
+        //This method orchestrates the connection setup and check
         private bool IsConnectionPossible()
         {
 
@@ -48,14 +42,14 @@ namespace LottoAPI
                     return false;
                 }
             }
-            
+
             if (!IsConnectionStringValid())
             {
                 return false;
             }
-            
+
             if (!IsTableExists())
-            {    
+            {
                 if (!CreateDbTable())
                 {
                     Console.WriteLine("Error! Table could not be created.");
@@ -85,7 +79,7 @@ namespace LottoAPI
             }
         }
 
-        //Check if sql database exists
+        //This method checks if sql database exists
         private bool IsDatabaseExists()
         {
             try
@@ -130,7 +124,7 @@ namespace LottoAPI
                                                     DrawNumber4 int,
                                                     DrawNumber5 int,
                                                     DrawDateTime char(19));", connection);
-                    
+
                     createTable.ExecuteReader();
                 }
 
@@ -226,7 +220,7 @@ namespace LottoAPI
             });
         }
 
-        
-        
+
+
     }
 }
