@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Serialization;
 using System.Data.SqlClient;
 using System.Data;
+using System.Configuration;
 
 namespace LottoAPI
 {
@@ -20,21 +21,26 @@ namespace LottoAPI
         private const string ConnectionStringName = "LotteryAppCon";
         private const string TableName = "DrawHistory";
         private const string DatabaseName = "LotteryDB";
-        private readonly string _connectionString = "Server=host.docker.internal,1450;Initial Catalog=master;User Id=sa;Password=AtTheSource!; MultipleActiveResultSets=true";
+        private readonly string _connectionString;
+        
 
+        
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            
+
+            _connectionString = Configuration.GetConnectionString(ConnectionStringName);
+
             if (!IsConnectionPossible())
             {
-                Console.WriteLine("Connection to database failed. Please check connection string and try again.");
+                Console.WriteLine("Connection to database failed. Trying again...");
                 Environment.Exit(1);
             }
         }
         
         private bool IsConnectionPossible()
         {
+
             if (!IsDatabaseExists())
             {
                 if (!CreateDatabase())

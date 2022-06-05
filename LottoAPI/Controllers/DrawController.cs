@@ -14,12 +14,15 @@ namespace LottoAPI.Controllers
         private const string ConnectionStringName = "LotteryAppCon";
         private const string DatabaseName = "LotteryDB";
         private const string TableName = "DrawHistory";
-        private readonly string _connectionString = "Server=host.docker.internal,1450;Initial Catalog=master;User Id=sa;Password=AtTheSource!; MultipleActiveResultSets=true";
+        private readonly string _connectionString;
         private readonly IConfiguration _configuration;
-
+        
         public DrawController(IConfiguration configuration)
         {
             _configuration = configuration;
+
+            _connectionString = _configuration.GetConnectionString(ConnectionStringName);
+
         }
 
 

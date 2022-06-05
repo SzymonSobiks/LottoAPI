@@ -13,6 +13,8 @@ namespace LottoAPI
     {
         public static void Main(string[] args)
         {
+            //Sleep 10s to allow the database to be created
+            System.Threading.Thread.Sleep(10000);
             CreateHostBuilder(args).Build().Run();
         }
 
